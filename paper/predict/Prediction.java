@@ -62,8 +62,8 @@ public class Prediction {
 
     public static void main(String[] args) {
         Prediction p = new Prediction();
-        p.buildConnection();
-//        System.out.println("png(filename=\""+Constant.imagePath+"acfmax.png\")");
+//        p.buildConnection();
+        System.out.println("png(filename=\""+Constant.imagePath+"acfmax.png\")");
     }
 //> D1=ts(demand1)
 //> D2=ts(demand2)
