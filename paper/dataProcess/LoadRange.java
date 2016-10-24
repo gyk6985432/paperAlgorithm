@@ -13,8 +13,8 @@ public class LoadRange {
     private int[] maxLoads = new int[60];
     private int[] minLoads = new int[60];
 
-    private String dataPath = "E:\\Demo\\luna-workspace\\paperAlgorithm\\paperAlgorithm\\data\\";
-
+//    private String dataPath = "E:\\Demo\\luna-workspace\\paperAlgorithm\\paperAlgorithm\\data\\";
+    private String dataPath = System.getProperty("user.dir")+"\\data\\";
     private void getLoadRange() throws IOException{
         File file = new File(dataPath);
         String[] names = sortNames(file.list());

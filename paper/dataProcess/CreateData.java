@@ -24,7 +24,8 @@ public class CreateData {
     private static int MINLOAD = 3120;
 
 //    数据保存路径
-    private String dataPath = "E:\\Demo\\luna-workspace\\paperAlgorithm\\paperAlgorithm\\data\\";
+//    private String dataPath = "E:\\Demo\\luna-workspace\\paperAlgorithm\\paperAlgorithm\\data\\";
+    private String dataPath = System.getProperty("user.dir")+"\\data\\";
 
 //    日负荷公式：DAYLOAD = MINLOAD + (MAXLOAD - MINLOAD)× (dayPercent + 5 - rand(5))
 //    日负荷×周系数公式：DAYLOAD = DAYLOAD × (weekPercent + 5 - rand(5))
@@ -61,6 +62,7 @@ public class CreateData {
             int[] dataForDay =  cd.createDataForDay();
             cd.writeDataForDay(dataForDay);
         }
+//        System.out.printf(cd.dataPath);
     }
 
 }

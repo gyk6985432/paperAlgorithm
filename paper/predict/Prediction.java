@@ -1,6 +1,6 @@
 package paper.predict;
 
-import org.rosuda.REngine.REXP;
+import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
 import paper.dataProcess.LoadRange;
@@ -12,6 +12,9 @@ public class Prediction {
     LoadRange loadRange = new LoadRange();
     int[] maxLoads,minLoads;
 
+    public Prediction(){
+        getRange();
+    }
 
     private void getRange(){
         maxLoads = loadRange.getMaxLoads();
@@ -21,15 +24,45 @@ public class Prediction {
     private void buildConnection(){
         try {
             RConnection rconn = new RConnection();
-            rconn.eval("tsmax = ts("+maxLoads+")");
-            rconn.eval("tsmin = ts("+minLoads+")");
-            REXP acfmax = rconn.eval("acf(tsmax, plot=FALSE)");
-            REXP acfmin = rconn.eval("acf(tsmin, plot=FALSE)");
-            REXP pacfmax = rconn.eval("pacf(tsmax, plot=FALSE)");
-            REXP pacfmin = rconn.eval("pacf(tsmin, plot=FALSE)");
+            rconn.eval("library(Rserve)");
+            //> D1=ts(demand1)
+            //> D2=ts(demand2)
+            rconn.assign("maxLoads",maxLoads);
+            rconn.assign("minLoads",minLoads);
+            rconn.eval("tsmax <- ts(maxLoads)");
+            rconn.eval("tsmin <- ts(minLoads)");
+
+            //  画出ACF和PACF
+            //> ACF1= acf(D1,plot = TRUE)   ACF2= acf(D2,plot = TRUE)
+            //> PACF1= pacf(D1,plot = TRUE)   PACF2= pacf(D2,plot = TRUE)
+            rconn.eval("png(filename=\"D:/acfmax.png\")");
+            rconn.eval("acf(tsmax, plot=TRUE)");
+            rconn.eval("dev.off()");
+
+            rconn.eval("png(filename=\"D:/acfmin.png\")");
+            rconn.eval("acf(tsmin, plot=TRUE)");
+            rconn.eval("dev.off()");
+
+            rconn.eval("png(filename=\"D:/pacfmax.png\")");
+            rconn.eval("pacf(tsmax, plot=TRUE)");
+            rconn.eval("dev.off()");
+
+            rconn.eval("png(filename=\"D:/pacfmin.png\")");
+            rconn.eval("pacf(tsmin, plot=TRUE)");
+            rconn.eval("dev.off()");
+            rconn.close();
         } catch (RserveException e) {
             e.printStackTrace();
+        } catch (REngineException e) {
+            e.printStackTrace();
         }
+    }
+
+
+    public static void main(String[] args) {
+        Prediction p = new Prediction();
+        p.buildConnection();
+
     }
 //> D1=ts(demand1)
 //> D2=ts(demand2)
@@ -51,7 +84,5 @@ public class Prediction {
 
 //> Box.test(f1$residuals,type = "Ljung-Box")
 //> Box.test(f2$residuals,type = "Ljung-Box")
-
-
 
 }
