@@ -4,6 +4,7 @@ import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
 import paper.dataProcess.LoadRange;
+import paper.utils.Constant;
 
 /**
  * Created by gyk on 2016/10/14.
@@ -35,19 +36,19 @@ public class Prediction {
             //  画出ACF和PACF
             //> ACF1= acf(D1,plot = TRUE)   ACF2= acf(D2,plot = TRUE)
             //> PACF1= pacf(D1,plot = TRUE)   PACF2= pacf(D2,plot = TRUE)
-            rconn.eval("png(filename=\"D:/acfmax.png\")");
+            rconn.eval("png(filename=\""+Constant.imagePath+"acfmax.png\")");
             rconn.eval("acf(tsmax, plot=TRUE)");
             rconn.eval("dev.off()");
 
-            rconn.eval("png(filename=\"D:/acfmin.png\")");
+            rconn.eval("png(filename=\""+Constant.imagePath+"acfmin.png\")");
             rconn.eval("acf(tsmin, plot=TRUE)");
             rconn.eval("dev.off()");
 
-            rconn.eval("png(filename=\"D:/pacfmax.png\")");
+            rconn.eval("png(filename=\""+Constant.imagePath+"pacfmax.png\")");
             rconn.eval("pacf(tsmax, plot=TRUE)");
             rconn.eval("dev.off()");
 
-            rconn.eval("png(filename=\"D:/pacfmin.png\")");
+            rconn.eval("png(filename=\""+Constant.imagePath+"pacfmin.png\")");
             rconn.eval("pacf(tsmin, plot=TRUE)");
             rconn.eval("dev.off()");
             rconn.close();
@@ -62,7 +63,7 @@ public class Prediction {
     public static void main(String[] args) {
         Prediction p = new Prediction();
         p.buildConnection();
-
+//        System.out.println("png(filename=\""+Constant.imagePath+"acfmax.png\")");
     }
 //> D1=ts(demand1)
 //> D2=ts(demand2)
