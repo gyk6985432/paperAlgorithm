@@ -1,5 +1,6 @@
 package paper.predict;
 
+import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
@@ -51,6 +52,12 @@ public class Prediction {
             rconn.eval("png(filename=\""+Constant.imagePath+"pacfmin.png\")");
             rconn.eval("pacf(tsmin, plot=TRUE)");
             rconn.eval("dev.off()");
+
+            //用auto.arima来识别模型
+            rconn.eval("library(forecast)");
+            rconn.eval("arimaMax = auto.arima(tsmax)");
+            REXP arimaMax = rconn.eval("arimaMax$");
+            System.out.println(arimaMax.toDebugString());
             rconn.close();
         } catch (RserveException e) {
             e.printStackTrace();
@@ -62,8 +69,8 @@ public class Prediction {
 
     public static void main(String[] args) {
         Prediction p = new Prediction();
-//        p.buildConnection();
-        System.out.println("png(filename=\""+Constant.imagePath+"acfmax.png\")");
+        p.buildConnection();
+//        System.out.println("png(filename=\""+Constant.imagePath+"acfmax.png\")");
     }
 //> D1=ts(demand1)
 //> D2=ts(demand2)
