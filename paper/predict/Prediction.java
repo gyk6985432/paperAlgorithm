@@ -1,6 +1,7 @@
 package paper.predict;
 
 import org.rosuda.REngine.REXP;
+import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.REngineException;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
@@ -23,12 +24,12 @@ public class Prediction {
         minLoads = loadRange.getMinLoads();
     }
 
-    private void buildConnection(){
+    private int[] buildConnection(){
+        int[] predicts = new int[2];
         try {
             RConnection rconn = new RConnection();
             rconn.eval("library(Rserve)");
-            //> D1=ts(demand1)
-            //> D2=ts(demand2)
+            //> D1=ts(demand1) D2=ts(demand2)
             rconn.assign("maxLoads",maxLoads);
             rconn.assign("minLoads",minLoads);
             rconn.eval("tsmax <- ts(maxLoads)");
@@ -55,23 +56,61 @@ public class Prediction {
 
             //用auto.arima来识别模型
             rconn.eval("library(forecast)");
-            rconn.eval("arimaMax = auto.arima(tsmax)");
-            REXP arimaMax = rconn.eval("arimaMax$");
-            System.out.println(arimaMax.toDebugString());
+            //源码forecast_7.3\forecast\R\newarima2.R
+            rconn.eval("arimaMax = auto.arima(tsmax,trace=TRUE)");
+            REXP arimaMax = rconn.eval("forecast:::arima.string(arimaMax, padding=TRUE)");
+            System.out.println("best Max model: " + arimaMax.asString());
+            rconn.eval("arimaMin = auto.arima(tsmin,trace=TRUE)");
+            REXP arimaMin = rconn.eval("forecast:::arima.string(arimaMin, padding=TRUE)");
+            System.out.println("best Min model: " + arimaMin.asString());
+
+            //预测f1=forecast.Arima(D1.ar,h=5),源码forecast_7.3\forecast\R\arima.R
+            rconn.eval("fMax = forecast.Arima(arimaMax,h=5)");
+            rconn.eval("png(filename=\""+Constant.imagePath+"forecastMax.png\")");
+            rconn.eval("plot(fMax)");
+            rconn.eval("dev.off()");
+            REXP fMax = rconn.eval("fMax$mean");
+            System.out.println(fMax.toDebugString());
+            System.out.println(fMax.asString());//预测的负荷最大值
+            predicts[0] = Integer.valueOf(fMax.asInteger());
+            rconn.eval("fMin = forecast.Arima(arimaMin,h=5)");
+            rconn.eval("png(filename=\""+Constant.imagePath+"forecastMin.png\")");
+            rconn.eval("plot(fMin)");
+            rconn.eval("dev.off()");
+            REXP fMin = rconn.eval("fMin$mean");
+            System.out.println(fMin.toDebugString());
+            System.out.println(fMin.asString());//预测的负荷最小值
+            predicts[1] = Integer.valueOf(fMin.asInteger());
+
+            //残差检验Box.test(f1$residuals,type = "Ljung-Box")
+            rconn.eval("testMax = Box.test(fMax$residuals,type = \"Ljung-Box\")");
+            REXP testMax = rconn.eval("testMax$p.value");
+            System.out.println(testMax.asString());
+            rconn.eval("testMin = Box.test(fMin$residuals,type = \"Ljung-Box\")");
+            REXP testMin = rconn.eval("testMin$p.value");
+            System.out.println(testMin.asString());
             rconn.close();
         } catch (RserveException e) {
             e.printStackTrace();
         } catch (REngineException e) {
             e.printStackTrace();
+        } catch (REXPMismatchException e) {
+            e.printStackTrace();
         }
+        return predicts;
     }
 
+    public int[] getPredicts(){
+        return buildConnection();
+    }
 
     public static void main(String[] args) {
         Prediction p = new Prediction();
-        p.buildConnection();
+        int[] result = p.getPredicts();
+        System.out.println(result[0]+"  "+result[1]);
 //        System.out.println("png(filename=\""+Constant.imagePath+"acfmax.png\")");
     }
+
 //> D1=ts(demand1)
 //> D2=ts(demand2)
 //
