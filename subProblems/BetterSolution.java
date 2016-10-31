@@ -52,6 +52,7 @@ public class BetterSolution {
     }
     //3.列出台数范围内的所有可能，筛掉不符合最小负荷的组合
     //http://www.geeksforgeeks.org/print-all-possible-combinations-of-r-elements-in-a-given-array-of-size-n/
+    //http://stackoverflow.com/questions/29910312/algorithm-to-get-all-the-combinations-of-size-n-from-an-array-java
     public int[][] getArrange(int minNum, int maxNum){
         int n1 = 1 << minNum;
         int n2 = 1 << maxNum;
