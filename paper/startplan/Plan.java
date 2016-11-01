@@ -1,14 +1,16 @@
-package subProblems;
+package paper.startplan;
 
-import java.util.ArrayList;
+import paper.entity.Unit;
+
 import java.util.List;
 
 /**
- * Created by gyk on 2016/10/9.
+ * Created by gyk on 2016/11/1.
  */
-public class BetterSolution {
+public class Plan {
     Unit[] units;
     int maxLoad,minLoad;
+
     //1.对数组从大到小排序
     //由于机组数量一般不超过数十台，而且一般机组启停较少，当有新机组加入时，
     //其他机组已经排好了顺序，因此这种情况下用插入insert排序法比较合适
@@ -25,6 +27,7 @@ public class BetterSolution {
             units[j+1]=temp;
         }
     }
+
     //2.根据最大负荷和最小负荷，求出最少需要多少台，最多需要多少台
     public int getMaxNum(){
         int hold = 0;
@@ -53,42 +56,45 @@ public class BetterSolution {
     //3.列出台数范围内的所有可能，筛掉不符合最小负荷的组合
     //http://www.geeksforgeeks.org/print-all-possible-combinations-of-r-elements-in-a-given-array-of-size-n/
     //http://stackoverflow.com/questions/29910312/algorithm-to-get-all-the-combinations-of-size-n-from-an-array-java
-    public int[][] getArrange(int minNum, int maxNum){
-        int n1 = 1 << minNum;
-        int n2 = 1 << maxNum;
-        int[][] table = new int[n2-n1][units.length];
-        int count=0;
-        for (int i=n1;i<n2;i++){
-            int[] item = new int[units.length];
-            for (int j=0;j<units.length;j++){
-                int temp = i;
-                if ((temp & (1 << j)) != 0){
-                    item[j] = 1;
-                }
-            }
-            table[count++] = item;
-        }
+    public List<int[]> getArrange(int minNum, int maxNum){
+        int[] idArr = new int[units.length];
+        for (int i=0;i<units.length;i++)
+            idArr[i] = units[i].getId();
+        PossiblePlans possiblePlans = new PossiblePlans(idArr,maxNum,minNum);
+        List<int[]> table = possiblePlans.getPossiblePlans();
+        Filter filter = new Filter(units,table,maxLoad,minLoad);
+        table = filter.filter();
         return table;
     }
 
+
     public static void main(String[] args) {
-        Unit[] units = new Unit[5];
-        units[0] = new Unit(1000,500,3);
-        units[1] = new Unit(600,300,3);
-        units[2] = new Unit(500,250,3);
-        units[3] = new Unit(330,150,3);
-        units[4] = new Unit(300,0,3);
-        BetterSolution bs = new BetterSolution();
-        bs.units = units;
-        bs.maxLoad = 1400;
-        bs.minLoad = 1000;
-        bs.sort();
-        int minNum = bs.getMinNum();
-        int maxNum = bs.getMaxNum();
-        int[][] result = bs.getArrange(minNum,maxNum);
-        for (int i=0;i<result.length;i++){
-            for (int j=0;j<5;j++){
-                System.out.print(result[i][j]+" ");
+//      火电：1000，1000，660，600，600，350，330
+//      水电：700，250，150
+//      装机容量：4540 + 1100 = 5640
+//      负荷需求范围：3120——5200
+        Unit[] units = new Unit[10];
+        units[0] = new Unit(1,1000,500,3);
+        units[1] = new Unit(2,1000,500,3);
+        units[2] = new Unit(3, 660,300,3);
+        units[3] = new Unit(4, 600,300,3);
+        units[4] = new Unit(5, 600,300,3);
+        units[5] = new Unit(6, 350,150,3);
+        units[6] = new Unit(7, 330,150,3);
+        units[7] = new Unit(8, 700,0,3);
+        units[8] = new Unit(9, 250,0,3);
+        units[9] = new Unit(10, 150,0,3);
+        Plan plan = new Plan();
+        plan.units = units;
+        plan.maxLoad = 5400;
+        plan.minLoad = 3120;
+        plan.sort();
+        int minNum = plan.getMinNum();
+        int maxNum = plan.getMaxNum();
+        List<int[]> result = plan.getArrange(minNum,maxNum);
+        for (int i=0;i<result.size();i++){
+            for (int j=0;j<result.get(i).length;j++){
+                System.out.print(result.get(i)[j]+" ");
             }
             System.out.println();
         }

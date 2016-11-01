@@ -1,6 +1,7 @@
 package paper.startplan;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -9,7 +10,7 @@ import java.util.List;
  */
 public class KCombination {
 
-    private List<int[]> result = new ArrayList<>();
+    private List<int[]> result;
 
     private void combinationUtil(int arr[], int data[], int start,
                                 int end, int index, int r)
@@ -46,20 +47,22 @@ public class KCombination {
         combinationUtil(arr, data, 0, n-1, 0, r);
     }
 
-    public int[][] getCombinations(int[] arr, int r){
+    public List<int[]> getCombinations(int[] arr, int r){
+         result = new LinkedList<>();
         int n = arr.length;
         printCombination(arr,n,r);
-        int[][] combinations = new int[result.size()][r];
-        return  result.toArray(combinations);
+//        int[][] combinations = new int[result.size()][r];
+//        return  result.toArray(combinations);
+        return  result;
     }
 
     public static void main(String[] args) {
         int[] arr = new int[]{1000,660,600,400,330};
         KCombination kc = new KCombination();
-        int[][] r = kc.getCombinations(arr,3);
-        for (int i=0;i<r.length;i++){
+        List<int[]> r = kc.getCombinations(arr,3);
+        for (int i=0;i<r.size();i++){
             for (int j=0;j<3;j++){
-                System.out.print(r[i][j]+" ");
+                System.out.print(r.get(i)[j]+" ");
             }
             System.out.println();
         }
