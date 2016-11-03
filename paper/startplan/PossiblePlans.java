@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Created by gyk on 2016/11/1.
- *
+ *获得最大至最小启动的机组数的所有排列组合
  */
 public class PossiblePlans {
     private int maxNum,minNum;//最大最小机组启动数

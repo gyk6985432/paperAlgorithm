@@ -10,16 +10,16 @@ import java.util.List;
  * Created by gyk on 2016/11/2.
  * 找出水电最多，火电最少的机组组合
  */
-public class TypeFilter {
+class TypeFilter {
     private Unit[] units;
     private List<int[]> table;
 
-    public TypeFilter(Unit[] units, List<int[]> table) {
+    TypeFilter(Unit[] units, List<int[]> table) {
         this.units = units;
         this.table = table;
     }
 
-    public List<int[]> filter(){
+    List<int[]> filter(){
         int minThermalCount=0, maxHydroCount=0;
         int[] item;
         int[] counts;
@@ -41,7 +41,7 @@ public class TypeFilter {
             }
         }
         iterator = table.iterator();
-        List<int[]> temp = new LinkedList<>();
+        LinkedList<int[]> temp = new LinkedList<>();
         while (iterator.hasNext()){//找出最小火电机组，最大水电机组数目的组合
             item = iterator.next();
             counts = getTypeCounts(item);
@@ -76,5 +76,4 @@ public class TypeFilter {
         }
         return "";
     }
-
 }

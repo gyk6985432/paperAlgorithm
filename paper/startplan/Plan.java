@@ -6,15 +6,16 @@ import java.util.List;
 
 /**
  * Created by gyk on 2016/11/1.
+ * 此类是获得机组启动组合的主类，其中调用了三个过滤器，得到一组符合需求，火电机组较少，经济性最好的机组组合
  */
 public class Plan {
-    Unit[] units;
-    int maxLoad,minLoad;
+    private Unit[] units;
+    private int maxLoad,minLoad;
 
     //1.对数组从大到小排序
     //由于机组数量一般不超过数十台，而且一般机组启停较少，当有新机组加入时，
     //其他机组已经排好了顺序，因此这种情况下用插入insert排序法比较合适
-    public void sort(){
+    private void sort(){
         int i,j;
         Unit temp;
         for (i=1;i<units.length;i++) {
@@ -29,7 +30,7 @@ public class Plan {
     }
 
     //2.根据最大负荷和最小负荷，求出最少需要多少台，最多需要多少台
-    public int getMaxNum(){
+    private int getMaxNum(){
         int hold = 0;
         int count = 0;
         for (int i=units.length-1;i>=0;i--){
@@ -41,13 +42,13 @@ public class Plan {
         }
         return 0;
     }
-    public int getMinNum(){
+    private int getMinNum(){
         int hold = 0;
         int count = 0;
-        for (int i=0;i<units.length;i++){
-            hold+=units[i].getMax();
+        for (Unit unit : units) {
+            hold += unit.getMax();
             count++;
-            if (hold>=maxLoad){
+            if (hold >= maxLoad) {
                 return count;
             }
         }
@@ -56,7 +57,7 @@ public class Plan {
     //3.列出台数范围内的所有可能，筛掉不符合最小负荷的组合
     //http://www.geeksforgeeks.org/print-all-possible-combinations-of-r-elements-in-a-given-array-of-size-n/
     //http://stackoverflow.com/questions/29910312/algorithm-to-get-all-the-combinations-of-size-n-from-an-array-java
-    public List<int[]> getArrange(int minNum, int maxNum){
+    private int[] getArrange(int minNum, int maxNum){
         int[] idArr = new int[units.length];
         for (int i=0;i<units.length;i++)
             idArr[i] = units[i].getId();
@@ -66,7 +67,8 @@ public class Plan {
         table = demandFilter.filter();
         TypeFilter typeFilter = new TypeFilter(units,table);
         table = typeFilter.filter();
-        return table;
+        AcceptFilter acceptFilter = new AcceptFilter(units,table);
+        return acceptFilter.filter();
     }
 
 
@@ -76,30 +78,32 @@ public class Plan {
 //      装机容量：4540 + 1100 = 5640
 //      负荷需求范围：3120——5200
         Unit[] units = new Unit[10];
-        units[0] = new Unit(1,1000,500,"thermal");
-        units[1] = new Unit(2,1000,500,"thermal");
-        units[2] = new Unit(3, 660,300,"thermal");
-        units[3] = new Unit(4, 600,300,"thermal");
-        units[4] = new Unit(5, 600,300,"thermal");
-        units[5] = new Unit(6, 350,150,"thermal");
-        units[6] = new Unit(7, 330,150,"thermal");
-        units[7] = new Unit(8, 700,0,"hydro");
-        units[8] = new Unit(9, 250,0,"hydro");
-        units[9] = new Unit(10, 150,0,"hydro");
+        units[0] = new Unit(1,1000, 500, "thermal");
+        units[1] = new Unit(2,1000, 500, "thermal");
+        units[2] = new Unit(3, 660, 300, "thermal");
+        units[3] = new Unit(4, 600, 300, "thermal");
+        units[4] = new Unit(5, 600, 300, "thermal");
+        units[5] = new Unit(6, 350, 150, "thermal");
+        units[6] = new Unit(7, 330, 150, "thermal");
+        units[7] = new Unit(8, 700, 0, "hydro");
+        units[8] = new Unit(9, 250, 0, "hydro");
+        units[9] = new Unit(10, 150, 0, "hydro");
         Plan plan = new Plan();
         plan.units = units;
         plan.maxLoad = 5000;
-        plan.minLoad = 3320;
+        plan.minLoad = 3020;
         plan.sort();
         int minNum = plan.getMinNum();
         int maxNum = plan.getMaxNum();
-        List<int[]> result = plan.getArrange(minNum,maxNum);
-        for (int i=0;i<result.size();i++){
-            for (int j=0;j<result.get(i).length;j++){
-                System.out.print(result.get(i)[j]+" ");
-            }
-            System.out.println();
+        int[] result = plan.getArrange(minNum,maxNum);
+//        for (int i=0;i<result.size();i++){
+//            for (int j=0;j<result.get(i).length;j++){
+//                System.out.print(result.get(i)[j]+" ");
+//            }
+//            System.out.println();
+//        }
+        for (int aResult : result) {
+            System.out.print(aResult + " ");
         }
-
     }
 }

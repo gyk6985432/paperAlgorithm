@@ -10,19 +10,19 @@ import java.util.List;
  * Created by gyk on 2016/11/1.
  * 筛掉不符合最大最小限制的机组组合
  */
-public class DemandFilter {
+class DemandFilter {
     private Unit[] units;
     private List<int[]> table;
     private int maxLoad,minLoad;
 
-    public DemandFilter(Unit[] units, List<int[]> table, int maxLoad, int minLoad) {
+    DemandFilter(Unit[] units, List<int[]> table, int maxLoad, int minLoad) {
         this.units = units;
         this.table = table;
         this.maxLoad = maxLoad;
         this.minLoad = minLoad;
     }
 
-    public List<int[]> filter(){
+    List<int[]> filter(){
         int sum_max,sum_min;
         Iterator iterator = table.iterator();
         while (iterator.hasNext()) {
