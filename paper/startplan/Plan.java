@@ -62,8 +62,10 @@ public class Plan {
             idArr[i] = units[i].getId();
         PossiblePlans possiblePlans = new PossiblePlans(idArr,maxNum,minNum);
         List<int[]> table = possiblePlans.getPossiblePlans();
-        Filter filter = new Filter(units,table,maxLoad,minLoad);
-        table = filter.filter();
+        DemandFilter demandFilter = new DemandFilter(units,table,maxLoad,minLoad);
+        table = demandFilter.filter();
+        TypeFilter typeFilter = new TypeFilter(units,table);
+        table = typeFilter.filter();
         return table;
     }
 
@@ -74,20 +76,20 @@ public class Plan {
 //      装机容量：4540 + 1100 = 5640
 //      负荷需求范围：3120——5200
         Unit[] units = new Unit[10];
-        units[0] = new Unit(1,1000,500,3);
-        units[1] = new Unit(2,1000,500,3);
-        units[2] = new Unit(3, 660,300,3);
-        units[3] = new Unit(4, 600,300,3);
-        units[4] = new Unit(5, 600,300,3);
-        units[5] = new Unit(6, 350,150,3);
-        units[6] = new Unit(7, 330,150,3);
-        units[7] = new Unit(8, 700,0,3);
-        units[8] = new Unit(9, 250,0,3);
-        units[9] = new Unit(10, 150,0,3);
+        units[0] = new Unit(1,1000,500,"thermal");
+        units[1] = new Unit(2,1000,500,"thermal");
+        units[2] = new Unit(3, 660,300,"thermal");
+        units[3] = new Unit(4, 600,300,"thermal");
+        units[4] = new Unit(5, 600,300,"thermal");
+        units[5] = new Unit(6, 350,150,"thermal");
+        units[6] = new Unit(7, 330,150,"thermal");
+        units[7] = new Unit(8, 700,0,"hydro");
+        units[8] = new Unit(9, 250,0,"hydro");
+        units[9] = new Unit(10, 150,0,"hydro");
         Plan plan = new Plan();
         plan.units = units;
-        plan.maxLoad = 5400;
-        plan.minLoad = 3120;
+        plan.maxLoad = 5000;
+        plan.minLoad = 3320;
         plan.sort();
         int minNum = plan.getMinNum();
         int maxNum = plan.getMaxNum();
