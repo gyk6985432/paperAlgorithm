@@ -28,9 +28,9 @@ class AcceptFilter {
         Iterator<int[]> iterator = table.iterator();
         if (iterator.hasNext()){
             item = iterator.next();
-            for (int i=0;i<item.length;i++){
-                if (findType(item[i]) == "thermal"){
-                    list1.add(find(item[i]).getMax());
+            for (int anItem : item) {
+                if (findType(anItem) == "thermal") {
+                    list1.add(find(anItem).getMax());
                 }
             }
             bestPlan = item;
@@ -52,18 +52,18 @@ class AcceptFilter {
     }
 
     private String findType(int index){
-        for (int i=0;i<units.length;i++){
-            if (index == units[i].getId()){
-                return units[i].getType();
+        for (Unit unit : units) {
+            if (index == unit.getId()) {
+                return unit.getType();
             }
         }
         return "";
     }
 
     private Unit find(int index){
-        for (int i=0;i<units.length;i++){
-            if (units[i].getId() == index){
-                return units[i];
+        for (Unit unit : units) {
+            if (unit.getId() == index) {
+                return unit;
             }
         }
         return null;

@@ -12,10 +12,10 @@ import paper.utils.Constant;
  * Created by gyk on 2016/10/14.
  */
 public class Prediction {
-    LoadRange loadRange = new LoadRange();
-    int[] maxLoads,minLoads;
+    private LoadRange loadRange = new LoadRange();
+    private int[] maxLoads,minLoads;
 
-    public Prediction(){
+    private Prediction(){
         getRange();
     }
 
@@ -72,7 +72,7 @@ public class Prediction {
             REXP fMax = rconn.eval("fMax$mean");
             System.out.println(fMax.toDebugString());
             System.out.println(fMax.asString());//预测的负荷最大值
-            predicts[0] = Integer.valueOf(fMax.asInteger());
+            predicts[0] = fMax.asInteger();
             rconn.eval("fMin = forecast.Arima(arimaMin,h=5)");
             rconn.eval("png(filename=\""+Constant.imagePath+"forecastMin.png\")");
             rconn.eval("plot(fMin)");
@@ -80,7 +80,7 @@ public class Prediction {
             REXP fMin = rconn.eval("fMin$mean");
             System.out.println(fMin.toDebugString());
             System.out.println(fMin.asString());//预测的负荷最小值
-            predicts[1] = Integer.valueOf(fMin.asInteger());
+            predicts[1] = fMin.asInteger();
 
             //残差检验Box.test(f1$residuals,type = "Ljung-Box")
             rconn.eval("testMax = Box.test(fMax$residuals,type = \"Ljung-Box\")");
@@ -100,7 +100,7 @@ public class Prediction {
         return predicts;
     }
 
-    public int[] getPredicts(){
+    private int[] getPredicts(){
         return buildConnection();
     }
 

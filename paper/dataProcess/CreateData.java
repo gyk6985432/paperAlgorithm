@@ -6,7 +6,7 @@ import java.util.Random;
 /**
  * Created by gyk on 2016/10/14.
  */
-public class CreateData {
+class CreateData {
 //    日变化
 //    1	 2	3	4	5	6	7	8	9	10	11	12
 //    35 28	21	10	0	4	20	31	49	63	69	65
@@ -30,7 +30,7 @@ public class CreateData {
 //    日负荷公式：DAYLOAD = MINLOAD + (MAXLOAD - MINLOAD)× (dayPercent + 5 - rand(5))
 //    日负荷×周系数公式：DAYLOAD = DAYLOAD × (weekPercent + 5 - rand(5))
     private int week = 1;
-    public int[] createDataForDay(){
+    private int[] createDataForDay(){
         if (week > 7){
             week = 1;
         }
@@ -45,12 +45,12 @@ public class CreateData {
     }
 
 //    写入文件，将新生成的负荷数据写入文件中，并把原来多余的删去
-    public void writeDataForDay(int[] load) throws IOException {
+    private void writeDataForDay(int[] load) throws IOException {
         File file = new File(dataPath);
         String[] names = file.list();
         FileWriter fileWriter = new FileWriter(dataPath+names.length+".txt");
-        for (int i=0;i<load.length;i++){
-            fileWriter.append(load[i]+"\r\n");
+        for (int aLoad : load) {
+            fileWriter.append(aLoad + "\r\n");
         }
         fileWriter.flush();
         fileWriter.close();

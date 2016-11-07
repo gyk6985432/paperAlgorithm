@@ -5,6 +5,7 @@ import paper.entity.Unit;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by gyk on 2016/11/2.
@@ -56,12 +57,12 @@ class TypeFilter {
 
     private int[] getTypeCounts(int[] item){
         int[] counts = new int[2];
-        for (int i=0;i<item.length;i++){
-            String type = findType(item[i]);
-            if (type == "thermal"){
+        for (int anItem : item) {
+            String type = findType(anItem);
+            if (Objects.equals(type, "thermal")) {
                 counts[0]++;
             }
-            if (type == "hydro"){
+            if (Objects.equals(type, "hydro")) {
                 counts[1]++;
             }
         }
@@ -69,9 +70,9 @@ class TypeFilter {
     }
 
     private String findType(int index){
-        for (int i=0;i<units.length;i++){
-            if (index == units[i].getId()){
-                return units[i].getType();
+        for (Unit unit : units) {
+            if (index == unit.getId()) {
+                return unit.getType();
             }
         }
         return "";

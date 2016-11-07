@@ -42,9 +42,9 @@ class DemandFilter {
     }
 
     private Unit find(int index){
-        for (int i=0;i<units.length;i++){
-            if (units[i].getId() == index){
-                return units[i];
+        for (Unit unit : units) {
+            if (unit.getId() == index) {
+                return unit;
             }
         }
         return null;

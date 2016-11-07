@@ -8,7 +8,7 @@ import java.util.List;
  * Created by gyk on 2016/11/1.
  * 此类是获得机组启动组合的主类，其中调用了三个过滤器，得到一组符合需求，火电机组较少，经济性最好的机组组合
  */
-public class Plan {
+class Plan {
     private Unit[] units;
     private int maxLoad,minLoad;
 

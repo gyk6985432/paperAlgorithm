@@ -8,7 +8,7 @@ import java.util.List;
  * Created by gyk on 2016/10/31.
  * KCombination类得到数组arr中，k个元素的所有组合，如{1,2,3,4,5}中3个元素->{1,2,3},{1,2,4}...{1,4,5},{3,4,5}
  */
-public class KCombination {
+class KCombination {
 
     private List<int[]> result;
 

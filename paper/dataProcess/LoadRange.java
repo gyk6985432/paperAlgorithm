@@ -8,7 +8,7 @@ import java.nio.charset.Charset;
 /**
  * Created by gyk on 2016/10/14.
  */
-public class LoadRange {
+class LoadRange {
     //    两月内的负荷数据
     private int[] maxLoads = new int[60];
     private int[] minLoads = new int[60];
@@ -37,12 +37,12 @@ public class LoadRange {
     private int[] getRange(int[] load){
         int max = load[0];
         int min = load[0];
-        for (int i=0;i<load.length;i++){
-            if (load[i]>max){
-                max = load[i];
+        for (int aLoad : load) {
+            if (aLoad > max) {
+                max = aLoad;
             }
-            if (load[i]<min){
-                min = load[i];
+            if (aLoad < min) {
+                min = aLoad;
             }
         }
         return new int[]{min,max};
@@ -67,7 +67,7 @@ public class LoadRange {
         return Integer.valueOf(name.split("\\.")[0]);
     }
 
-    public LoadRange() {
+    private LoadRange() {
         try {
             getLoadRange();
         } catch (IOException e) {
