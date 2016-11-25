@@ -34,6 +34,8 @@ public class Prediction {
             rconn.assign("minLoads",minLoads);
             rconn.eval("tsmax <- ts(maxLoads)");
             rconn.eval("tsmin <- ts(minLoads)");
+            REXP tsmin = rconn.eval("tsmin");
+            System.out.println("tsmin的详细信息："+tsmin.toDebugString()+"结束\r\n");
 
             //  画出ACF和PACF
             //> ACF1= acf(D1,plot = TRUE)   ACF2= acf(D2,plot = TRUE)
@@ -70,25 +72,25 @@ public class Prediction {
             rconn.eval("plot(fMax)");
             rconn.eval("dev.off()");
             REXP fMax = rconn.eval("fMax$mean");
-            System.out.println(fMax.toDebugString());
-            System.out.println(fMax.asString());//预测的负荷最大值
+//            System.out.println(fMax.toDebugString());
+            System.out.println("max load average forecast: "+fMax.asString());//预测的负荷最大值
             predicts[0] = fMax.asInteger();
             rconn.eval("fMin = forecast.Arima(arimaMin,h=5)");
             rconn.eval("png(filename=\""+Constant.imagePath+"forecastMin.png\")");
             rconn.eval("plot(fMin)");
             rconn.eval("dev.off()");
             REXP fMin = rconn.eval("fMin$mean");
-            System.out.println(fMin.toDebugString());
-            System.out.println(fMin.asString());//预测的负荷最小值
+//            System.out.println(fMin.toDebugString());
+            System.out.println("min load average forecast: "+fMin.asString());//预测的负荷最小值
             predicts[1] = fMin.asInteger();
 
             //残差检验Box.test(f1$residuals,type = "Ljung-Box")
             rconn.eval("testMax = Box.test(fMax$residuals,type = \"Ljung-Box\")");
             REXP testMax = rconn.eval("testMax$p.value");
-            System.out.println(testMax.asString());
+            System.out.println("max load Box-test p-value: "+testMax.asString());
             rconn.eval("testMin = Box.test(fMin$residuals,type = \"Ljung-Box\")");
             REXP testMin = rconn.eval("testMin$p.value");
-            System.out.println(testMin.asString());
+            System.out.println("min load Box-test p-value: "+testMin.asString());
             rconn.close();
         } catch (RserveException e) {
             e.printStackTrace();

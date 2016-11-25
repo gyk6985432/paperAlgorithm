@@ -3,7 +3,7 @@ package paper.entity;
 /**
  * Created by gyk on 2016/5/20.
  */
-class Unit {
+public class Unit {
     private int id;
     private int max;
     private int min;

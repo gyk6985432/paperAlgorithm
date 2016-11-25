@@ -59,9 +59,9 @@ class KCombination {
     public static void main(String[] args) {
         int[] arr = new int[]{1000,660,600,400,330};
         KCombination kc = new KCombination();
-        List<int[]> r = kc.getCombinations(arr,3);
+        List<int[]> r = kc.getCombinations(arr,2);
         for (int i=0;i<r.size();i++){
-            for (int j=0;j<3;j++){
+            for (int j=0;j<2;j++){
                 System.out.print(r.get(i)[j]+" ");
             }
             System.out.println();
