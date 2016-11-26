@@ -36,7 +36,7 @@ class KCombination {
         }
     }
 
-    // The main function that prints all combinations of size r
+    // The function that prints all combinations of size r
     // in arr[] of size n. This function mainly uses combinationUtil()
     private void printCombination(int arr[], int n, int r)
     {

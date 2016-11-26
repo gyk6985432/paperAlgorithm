@@ -15,7 +15,7 @@ public class Prediction {
     private LoadRange loadRange = new LoadRange();
     private int[] maxLoads,minLoads;
 
-    private Prediction(){
+    public Prediction(){
         getRange();
     }
 
@@ -102,7 +102,7 @@ public class Prediction {
         return predicts;
     }
 
-    private int[] getPredicts(){
+    public int[] getPredicts(){
         return buildConnection();
     }
 

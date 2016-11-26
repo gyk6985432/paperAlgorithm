@@ -8,9 +8,16 @@ import java.util.List;
  * Created by gyk on 2016/11/1.
  * 此类是获得机组启动组合的主类，其中调用了三个过滤器，得到一组符合需求，火电机组较少，经济性最好的机组组合
  */
-class Plan {
+public class Plan {
     private Unit[] units;
     private int maxLoad,minLoad;
+
+    public Plan(Unit[] units,int maxLoad,int minLoad) {
+        this.units = units;
+        this.maxLoad = maxLoad;
+        this.minLoad = minLoad;
+        sort();
+    }
 
     //1.对数组从大到小排序
     //由于机组数量一般不超过数十台，而且一般机组启停较少，当有新机组加入时，
@@ -57,7 +64,9 @@ class Plan {
     //3.列出台数范围内的所有可能，筛掉不符合最小负荷的组合
     //http://www.geeksforgeeks.org/print-all-possible-combinations-of-r-elements-in-a-given-array-of-size-n/
     //http://stackoverflow.com/questions/29910312/algorithm-to-get-all-the-combinations-of-size-n-from-an-array-java
-    private List<int[]> getArrange(int minNum, int maxNum){
+    public List<int[]> getArrange(){
+        int minNum = getMinNum();
+        int maxNum = getMaxNum();
         int[] idArr = new int[units.length];
         for (int i=0;i<units.length;i++)
             idArr[i] = units[i].getId();
@@ -72,7 +81,7 @@ class Plan {
         return table;
     }
 
-    private int[] getBestArrange(List<int[]> table){
+    public int[] getBestArrange(List<int[]> table){
         AcceptFilter acceptFilter = new AcceptFilter(units,table);
         return acceptFilter.filter();
     }
@@ -97,8 +106,7 @@ class Plan {
 //        units[7] = new Unit(8, 700, 0, "hydro");
 //        units[8] = new Unit(9, 250, 0, "hydro");
 //        units[9] = new Unit(10, 150, 0, "hydro");
-        Plan plan = new Plan();
-        plan.units = units;
+        Plan plan = new Plan(units,4674,2944);
         int maxout=0,minout=0;
         for (int i=0;i<units.length;i++){
             maxout+=units[i].getMax();
@@ -106,12 +114,8 @@ class Plan {
         }
         System.out.println("最大输出功率为："+maxout);
         System.out.println("最小输出功率为："+minout);
-        plan.maxLoad = 4674;
-        plan.minLoad = 2944;
-        plan.sort();
-        int minNum = plan.getMinNum();
-        int maxNum = plan.getMaxNum();
-        List<int[]> result = plan.getArrange(minNum,maxNum);
+
+        List<int[]> result = plan.getArrange();
         int[] bestResult = plan.getBestArrange(result);
         if(result == null || bestResult==null){
             System.out.println("No results!");

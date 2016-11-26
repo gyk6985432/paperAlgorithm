@@ -9,6 +9,16 @@ public class Unit {
     private int min;
     private double rate;
     private String type;
+    private double a,b,c;
+
+    public Unit(int id, int max, int min, double a, double b, double c) {
+        this.id = id;
+        this.max = max;
+        this.min = min;
+        this.a = a;
+        this.b = b;
+        this.c = c;
+    }
 
     public Unit(int id, int max, int min, double rate, String type) {
         this.id = id;
@@ -86,5 +96,17 @@ public class Unit {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public double getA() {
+        return a;
+    }
+
+    public double getB() {
+        return b;
+    }
+
+    public double getC() {
+        return c;
     }
 }
