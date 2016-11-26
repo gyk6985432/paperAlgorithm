@@ -20,8 +20,8 @@ class CreateData {
     private static int[] weekPercent = {100,99,97,98,98,94,94};
 
 //    最大负荷5200，最小负荷3120，
-    private static int MAXLOAD = 5200;
-    private static int MINLOAD = 3120;
+    private static int MAXLOAD = 4720;
+    private static int MINLOAD = 2895;
 
 //    数据保存路径
 //    private String dataPath = "E:\\Demo\\luna-workspace\\paperAlgorithm\\paperAlgorithm\\data\\";

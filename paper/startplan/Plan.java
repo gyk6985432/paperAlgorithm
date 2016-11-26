@@ -57,7 +57,7 @@ class Plan {
     //3.列出台数范围内的所有可能，筛掉不符合最小负荷的组合
     //http://www.geeksforgeeks.org/print-all-possible-combinations-of-r-elements-in-a-given-array-of-size-n/
     //http://stackoverflow.com/questions/29910312/algorithm-to-get-all-the-combinations-of-size-n-from-an-array-java
-    private int[] getArrange(int minNum, int maxNum){
+    private List<int[]> getArrange(int minNum, int maxNum){
         int[] idArr = new int[units.length];
         for (int i=0;i<units.length;i++)
             idArr[i] = units[i].getId();
@@ -65,8 +65,14 @@ class Plan {
         List<int[]> table = possiblePlans.getPossiblePlans();
         DemandFilter demandFilter = new DemandFilter(units,table,maxLoad,minLoad);
         table = demandFilter.filter();
-        TypeFilter typeFilter = new TypeFilter(units,table);
-        table = typeFilter.filter();
+//        TypeFilter typeFilter = new TypeFilter(units,table);
+//        table = typeFilter.filter();
+//        AcceptFilter acceptFilter = new AcceptFilter(units,table);
+//        return acceptFilter.filter();
+        return table;
+    }
+
+    private int[] getBestArrange(List<int[]> table){
         AcceptFilter acceptFilter = new AcceptFilter(units,table);
         return acceptFilter.filter();
     }
@@ -85,24 +91,42 @@ class Plan {
         units[4] = new Unit(5, 600, 300, "thermal");
         units[5] = new Unit(6, 350, 150, "thermal");
         units[6] = new Unit(7, 330, 150, "thermal");
-        units[7] = new Unit(8, 700, 0, "hydro");
-        units[8] = new Unit(9, 250, 0, "hydro");
-        units[9] = new Unit(10, 150, 0, "hydro");
+        units[7] = new Unit(8, 330, 150, "thermal");
+        units[8] = new Unit(9, 250, 130, "thermal");
+        units[9] = new Unit(10, 150, 70, "thermal");
+//        units[7] = new Unit(8, 700, 0, "hydro");
+//        units[8] = new Unit(9, 250, 0, "hydro");
+//        units[9] = new Unit(10, 150, 0, "hydro");
         Plan plan = new Plan();
         plan.units = units;
-        plan.maxLoad = 5000;
-        plan.minLoad = 3020;
+        int maxout=0,minout=0;
+        for (int i=0;i<units.length;i++){
+            maxout+=units[i].getMax();
+            minout+=units[i].getMin();
+        }
+        System.out.println("最大输出功率为："+maxout);
+        System.out.println("最小输出功率为："+minout);
+        plan.maxLoad = 4674;
+        plan.minLoad = 2944;
         plan.sort();
         int minNum = plan.getMinNum();
         int maxNum = plan.getMaxNum();
-        int[] result = plan.getArrange(minNum,maxNum);
-//        for (int i=0;i<result.size();i++){
-//            for (int j=0;j<result.get(i).length;j++){
-//                System.out.print(result.get(i)[j]+" ");
-//            }
-//            System.out.println();
-//        }
-        for (int aResult : result) {
+        List<int[]> result = plan.getArrange(minNum,maxNum);
+        int[] bestResult = plan.getBestArrange(result);
+        if(result == null || bestResult==null){
+            System.out.println("No results!");
+            return;
+        }
+        System.out.println("一共"+ result.size() +"组可行解:");
+        for (int i=0;i<result.size();i++){
+            for (int j=0;j<result.get(i).length;j++){
+                System.out.print(result.get(i)[j]+" ");
+            }
+            System.out.println();
+        }
+
+        System.out.println("最佳组合：");
+        for (int aResult : bestResult) {
             System.out.print(aResult + " ");
         }
     }
