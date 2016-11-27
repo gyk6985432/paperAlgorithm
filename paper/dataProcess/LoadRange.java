@@ -31,6 +31,9 @@ public class LoadRange {
             int[] range = getRange(loads);
             minLoads[i] = range[0];
             maxLoads[i] = range[1];
+            br.close();
+            isr.close();
+            fis.close();
         }
     }
 

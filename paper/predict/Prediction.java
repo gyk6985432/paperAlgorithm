@@ -103,6 +103,7 @@ public class Prediction {
     }
 
     public int[] getPredicts(){
+        System.out.println("负荷范围预测完成。。。");
         return buildConnection();
     }
 

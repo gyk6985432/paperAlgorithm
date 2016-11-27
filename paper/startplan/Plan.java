@@ -78,6 +78,7 @@ public class Plan {
 //        table = typeFilter.filter();
 //        AcceptFilter acceptFilter = new AcceptFilter(units,table);
 //        return acceptFilter.filter();
+        System.out.println("机组启停组合的所有可行解计算完成。。。");
         return table;
     }
 
@@ -93,20 +94,30 @@ public class Plan {
 //      装机容量：4540 + 1100 = 5640
 //      负荷需求范围：3120——5200
         Unit[] units = new Unit[10];
-        units[0] = new Unit(1,1000, 500, "thermal");
-        units[1] = new Unit(2,1000, 500, "thermal");
-        units[2] = new Unit(3, 660, 300, "thermal");
-        units[3] = new Unit(4, 600, 300, "thermal");
-        units[4] = new Unit(5, 600, 300, "thermal");
-        units[5] = new Unit(6, 350, 150, "thermal");
-        units[6] = new Unit(7, 330, 150, "thermal");
-        units[7] = new Unit(8, 330, 150, "thermal");
-        units[8] = new Unit(9, 250, 130, "thermal");
-        units[9] = new Unit(10, 150, 70, "thermal");
+//        units[0] = new Unit(1,1000, 500, "thermal");
+//        units[1] = new Unit(2,1000, 500, "thermal");
+//        units[2] = new Unit(3, 660, 300, "thermal");
+//        units[3] = new Unit(4, 600, 300, "thermal");
+//        units[4] = new Unit(5, 600, 300, "thermal");
+//        units[5] = new Unit(6, 350, 150, "thermal");
+//        units[6] = new Unit(7, 330, 150, "thermal");
+//        units[7] = new Unit(8, 330, 150, "thermal");
+//        units[8] = new Unit(9, 250, 130, "thermal");
+//        units[9] = new Unit(10, 150, 70, "thermal");
+        units[0] = new Unit(1,600, 300, 0.0028,273.5, 13700);
+        units[1] = new Unit(2,600, 300, 0.0139,258.5, 14500);
+        units[2] = new Unit(3, 600, 300, 0.0083,268.5, 14100);
+        units[3] = new Unit(4, 360, 150, 0.0162,294.25, 6810);
+        units[4] = new Unit(5, 360, 150, 0.0025,307.75, 6737.5);
+        units[5] = new Unit(6, 360, 150, 0.0152,296.5, 6765);
+        units[6] = new Unit(7, 360, 150, 0.0611,278.5, 6350);
+        units[7] = new Unit(8, 200, 100, 0.0208,303.75, 5416.67);
+        units[8] = new Unit(9, 150, 60, 0.0333,311.75, 4635.42);
+        units[9] = new Unit(10, 150, 60, 0.0494,312, 5040);
 //        units[7] = new Unit(8, 700, 0, "hydro");
 //        units[8] = new Unit(9, 250, 0, "hydro");
 //        units[9] = new Unit(10, 150, 0, "hydro");
-        Plan plan = new Plan(units,4674,2944);
+        Plan plan = new Plan(units,3410,2097);
         int maxout=0,minout=0;
         for (int i=0;i<units.length;i++){
             maxout+=units[i].getMax();

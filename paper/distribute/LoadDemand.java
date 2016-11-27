@@ -32,7 +32,10 @@ public class LoadDemand {
         while ((line = br.readLine()) != null){
             demands[j++] = Integer.valueOf(line);
         }
-        return;
+        br.close();
+        isr.close();
+        fis.close();
+        System.out.println("负荷数据加载完成。。。");
     }
 
     private String getLastFile(String[] names){

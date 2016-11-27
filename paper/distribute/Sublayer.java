@@ -14,58 +14,65 @@ public class Sublayer {
     private double lambda,mu;
     private int sumOutput, sumMaxOutput;
     private double sumCost;
+    private int[] outputs;
 
     public Sublayer(Unit[] units) {
         this.units = units;
-        compute();
+        outputs = new int[units.length];
     }
 
-    public void setStartPlan(int[] startPlan) {
+    void setStartPlan(int[] startPlan) {
         this.startPlan = startPlan;
     }
 
-    public void setLambda(double lambda) {
+    void setLambda(double lambda) {
         this.lambda = lambda;
     }
 
-    public void setMu(double mu) {
+    void setMu(double mu) {
         this.mu = mu;
     }
 
-    private void compute(){
+    public void compute(){
         sumOutput = 0;
         sumMaxOutput = 0;
         sumCost = 0;
         for (int index : startPlan) {
             int output = computeOutput(index);
+            outputs[index-1] = output;
             sumOutput += output;
             sumCost += computeCost(index, output);
-            sumMaxOutput += units[index].getMax();
+            sumMaxOutput += units[index-1].getMax();
         }
+        System.out.println("底层问题计算完成。。。");
     }
 
     private int computeOutput(int index){
-        return (int)((lambda-units[index].getB())/2/units[index].getA());
+        return (int)((lambda-units[index-1].getB())/2/units[index-1].getA());
     }
 
     private double computeCost(int index, int output){
-        Unit unit = units[index];
+        Unit unit = units[index-1];
         double a = unit.getA();
         double b = unit.getB();
         double c = unit.getC();
-        int maxOutput = units[index].getMax();
+        int maxOutput = units[index-1].getMax();
         return a*output*output+b*output+c-lambda*output-mu*maxOutput;
     }
 
-    public int getSumOutput() {
+    int getSumOutput() {
         return sumOutput;
     }
 
-    public int getSumMaxOutput() {
+    int getSumMaxOutput() {
         return sumMaxOutput;
     }
 
-    public double getSumCost() {
+    double getSumCost() {
         return sumCost;
+    }
+
+    public int[] getOutputs(){
+        return outputs;
     }
 }

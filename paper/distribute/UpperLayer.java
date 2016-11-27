@@ -8,8 +8,8 @@ import java.util.List;
  */
 public class UpperLayer {
     private MiddleLayer middleLayer;
-    List<int[]> startPlans;
-    int[] bestPlan;
+    private List<int[]> startPlans;
+    private int[] bestPlan;
 
     public UpperLayer(MiddleLayer middleLayer,List<int[]> startPlans) {
         this.middleLayer = middleLayer;
@@ -30,5 +30,6 @@ public class UpperLayer {
                 bestPlan = plan;
             }
         }
+        System.out.println("上层问题计算完成。。。");
     }
 }
