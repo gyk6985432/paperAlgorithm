@@ -57,22 +57,24 @@ public class Main {
         LoadDemand ld = new LoadDemand();
         int[] demands = ld.getDemands();
 
-        for (int t=0;t<1;t++){
+        for (int t=20;t<21;t++){
             Sublayer sublayer = new Sublayer(units);
             MiddleLayer middleLayer = new MiddleLayer(sublayer,demands[t],0);
             UpperLayer upperLayer = new UpperLayer(middleLayer,startPlans);
             int[] bestplan = upperLayer.getBestPlan();
-            System.out.println("best plan: ");
+            int[] outputs = upperLayer.getOutput();
+
+            System.out.println("time " + t + " best plan: ");
             for (int item:bestplan) {
                 System.out.print(item+" ");
             }
-            int[] outputs = sublayer.getOutputs();
             System.out.println("各机组输出功率：");
             for (int item : outputs){
-                System.out.println(item+ " ");
+                System.out.print(item+ " ");
             }
+            System.out.println();
         }
-
+        System.out.println("计算完成。");
 
     }
 }

@@ -21,6 +21,13 @@ public class Sublayer {
         outputs = new int[units.length];
     }
 
+    private void init(){
+        sumOutput = 0;
+        sumMaxOutput = 0;
+        sumCost = 0;
+        outputs = new int[units.length];
+    }
+
     void setStartPlan(int[] startPlan) {
         this.startPlan = startPlan;
     }
@@ -34,17 +41,21 @@ public class Sublayer {
     }
 
     public void compute(){
-        sumOutput = 0;
-        sumMaxOutput = 0;
-        sumCost = 0;
+        init();
         for (int index : startPlan) {
             int output = computeOutput(index);
+            if (output > units[index-1].getMax()){
+                output = units[index-1].getMax();
+            }
+            if (output < units[index-1].getMin()){
+                output = units[index-1].getMin();
+            }
             outputs[index-1] = output;
             sumOutput += output;
             sumCost += computeCost(index, output);
             sumMaxOutput += units[index-1].getMax();
         }
-        System.out.println("底层问题计算完成。。。");
+//        System.out.println("底层问题计算完成。。。");
     }
 
     private int computeOutput(int index){
@@ -57,7 +68,8 @@ public class Sublayer {
         double b = unit.getB();
         double c = unit.getC();
         int maxOutput = units[index-1].getMax();
-        return a*output*output+b*output+c-lambda*output-mu*maxOutput;
+//        return a*output*output+b*output+c-lambda*output-mu*maxOutput;
+        return a*output*output+b*output+c-lambda*output;
     }
 
     int getSumOutput() {

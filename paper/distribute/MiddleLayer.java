@@ -12,31 +12,40 @@ public class MiddleLayer {
     private double theta,rho;//theta,rho初值选取需要调整
     private int demand;//某一时刻的负荷数据
     private int reserve;//某一时刻的旋转备用
+    private int[] output;
 
     public MiddleLayer(Sublayer sublayer, int demand, int reserve) {
         this.sublayer = sublayer;
-        this.lambda = 300;
-        this.mu = 1;
-        this.g_lambda = 1;
-        this.g_mu = 1;
-        this.theta = 0.04;
-        this.rho = 1;
         this.demand = demand;
         this.reserve = reserve;
         this.reserve = demand / 20;        //暂设旋转备用R=D×0.05
+        init();
+    }
+
+    private void init(){
+        this.lambda = 451;
+        this.mu = 1;
+        this.g_lambda = 1;
+        this.g_mu = 1;
+        this.theta = 11;
+        this.rho = 0.9995;
     }
 
     double compute(int[] plan){
-        double cost = 0;
+        init();
+        double cost;
+        double maxCost = 0;
         sublayer.setStartPlan(plan);
-        int count = 0;
-        while (Math.abs(g_lambda) > 0.000001 || Math.abs(g_mu) > 0.000001){
+//        while (Math.abs(g_lambda) > 0.000001 || Math.abs(g_mu) > 0.000001){
+        while (Math.abs(g_lambda) > 0.000001){
             cost = iterate();
-            count++;
-            System.out.println(count);
+            if (cost>maxCost){
+                maxCost = cost;
+                output = sublayer.getOutputs();
+            }
         }
-        System.out.println("中间层问题计算完成。。。");
-        return cost;
+//        System.out.println("中间层问题计算完成。。。");
+        return maxCost;
     }
 
     private double iterate(){
@@ -50,16 +59,20 @@ public class MiddleLayer {
         g_mu = demand + reserve - sublayer.getSumMaxOutput();
         //更新拉格朗日乘子
         lambda = lambda + theta * g_lambda;
-//        if (lambda<0) lambda=0;
+        if (lambda<0) lambda=0;
         mu = mu + theta * g_mu;
-//        if (mu<0) mu=0;
+        if (mu<0) mu=0;
         theta = theta * rho;
-        System.out.println("g_lambda:" + g_lambda+ " g_mu:"+g_mu);
+        System.out.println("lambda:" + lambda + " g_lambda:" + g_lambda);
         return cost;
     }
 
     private double systemSum(){
-        return lambda * demand + mu * (demand + reserve);
+//        return lambda * demand + mu * (demand + reserve);
+        return lambda * demand;
     }
 
+    public int[] getOutput() {
+        return output;
+    }
 }

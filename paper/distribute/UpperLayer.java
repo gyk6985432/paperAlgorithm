@@ -10,6 +10,7 @@ public class UpperLayer {
     private MiddleLayer middleLayer;
     private List<int[]> startPlans;
     private int[] bestPlan;
+    private int[] output;
 
     public UpperLayer(MiddleLayer middleLayer,List<int[]> startPlans) {
         this.middleLayer = middleLayer;
@@ -21,15 +22,21 @@ public class UpperLayer {
         return bestPlan;
     }
 
+    public int[] getOutput() {
+        return output;
+    }
+
     private void iterate(){
-        double minimumCost = 0;
+        double minimumCost = Integer.MAX_VALUE;
         for (int[] startPlan : startPlans) {
             int[] plan = startPlan.clone();
             double cost = middleLayer.compute(plan);
             if (cost < minimumCost) {
+                minimumCost = cost;
                 bestPlan = plan;
+                output = middleLayer.getOutput();
             }
         }
-        System.out.println("上层问题计算完成。。。");
+//        System.out.println("上层问题计算完成。。。");
     }
 }
