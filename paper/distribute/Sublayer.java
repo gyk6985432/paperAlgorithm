@@ -67,7 +67,7 @@ public class Sublayer {
         double a = unit.getA();
         double b = unit.getB();
         double c = unit.getC();
-        int maxOutput = units[index-1].getMax();
+//        int maxOutput = units[index-1].getMax();
 //        return a*output*output+b*output+c-lambda*output-mu*maxOutput;
         return a*output*output+b*output+c-lambda*output;
     }

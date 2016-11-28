@@ -23,12 +23,12 @@ public class MiddleLayer {
     }
 
     private void init(){
-        this.lambda = 451;
+        this.lambda = 13;
         this.mu = 1;
         this.g_lambda = 1;
         this.g_mu = 1;
-        this.theta = 11;
-        this.rho = 0.9995;
+        this.theta = 3;
+        this.rho = 0.995;
     }
 
     double compute(int[] plan){
@@ -63,7 +63,7 @@ public class MiddleLayer {
         mu = mu + theta * g_mu;
         if (mu<0) mu=0;
         theta = theta * rho;
-        System.out.println("lambda:" + lambda + " g_lambda:" + g_lambda);
+//        System.out.println("lambda:" + lambda + " g_lambda:" + g_lambda);
         return cost;
     }
 

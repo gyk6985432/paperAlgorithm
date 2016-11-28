@@ -57,19 +57,27 @@ public class Main {
         LoadDemand ld = new LoadDemand();
         int[] demands = ld.getDemands();
 
-        for (int t=20;t<21;t++){
+        //在调试过程中，发现当负荷数据>3380时均无法收敛，3380=1800+2×360+150×2+200，目前还没有弄清楚为何会出现该问题。
+        for (int t=0;t<24;t++){
             Sublayer sublayer = new Sublayer(units);
             MiddleLayer middleLayer = new MiddleLayer(sublayer,demands[t],0);
             UpperLayer upperLayer = new UpperLayer(middleLayer,startPlans);
             int[] bestplan = upperLayer.getBestPlan();
             int[] outputs = upperLayer.getOutput();
 
-            System.out.println("time " + t + " best plan: ");
+//            System.out.println("time " + t + " best plan: ");
+            int[] isstart = new int[]{0,0,0,0,0,0,0,0,0,0};
+            int[] isoutput = new int[]{0,0,0,0,0,0,0,0,0,0};
+
             for (int item:bestplan) {
+//                System.out.print(item+" ");
+                isstart[item-1] = 1;
+                isoutput[item-1] = outputs[item-1];
+            }
+            for (int item : isstart) {
                 System.out.print(item+" ");
             }
-            System.out.println("各机组输出功率：");
-            for (int item : outputs){
+            for (int item : isoutput){
                 System.out.print(item+ " ");
             }
             System.out.println();
