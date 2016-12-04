@@ -13,6 +13,7 @@ public class MiddleLayer {
     private int demand;//某一时刻的负荷数据
     private int reserve;//某一时刻的旋转备用
     private int[] output;
+    public static int count;
 
     public MiddleLayer(Sublayer sublayer, int demand, int reserve) {
         this.sublayer = sublayer;
@@ -43,6 +44,7 @@ public class MiddleLayer {
                 maxCost = cost;
                 output = sublayer.getOutputs();
             }
+            count++;
         }
 //        System.out.println("中间层问题计算完成。。。");
         return maxCost;
