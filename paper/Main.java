@@ -9,6 +9,8 @@ import paper.predict.Prediction;
 import paper.startplan.Plan;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -61,16 +63,20 @@ public class Main {
         for (int t=0;t<24;t++){
             Sublayer sublayer = new Sublayer(units);
             MiddleLayer middleLayer = new MiddleLayer(sublayer,demands[t],0);
-            UpperLayer upperLayer = new UpperLayer(middleLayer,startPlans);
+//            UpperLayer upperLayer = new UpperLayer(middleLayer,startPlans);
+            //也优先次序法确定的机组组合{1,2,3,4,5,6,7,8}
+            List<int[]> refStartPlan = new LinkedList<>();
+            refStartPlan.add(new int[]{1,2,3,4,5,6,7,8});
+            UpperLayer upperLayer = new UpperLayer(middleLayer,refStartPlan);//更改startplan可对比结果
             int[] bestplan = upperLayer.getBestPlan();
             int[] outputs = upperLayer.getOutput();
+            double cost = upperLayer.getMinimumCost();
 
 //            System.out.println("time " + t + " best plan: ");
             int[] isstart = new int[]{0,0,0,0,0,0,0,0,0,0};
             int[] isoutput = new int[]{0,0,0,0,0,0,0,0,0,0};
 
             for (int item:bestplan) {
-//                System.out.print(item+" ");
                 isstart[item-1] = 1;
                 isoutput[item-1] = outputs[item-1];
             }
@@ -80,7 +86,8 @@ public class Main {
             for (int item : isoutput){
                 System.out.print(item+ " ");
             }
-            System.out.println();
+            System.out.println(cost);
+
         }
         System.out.println("计算完成。");
 

@@ -72,7 +72,7 @@ public class MiddleLayer {
         return lambda * demand;
     }
 
-    public int[] getOutput() {
+    int[] getOutput() {
         return output;
     }
 }

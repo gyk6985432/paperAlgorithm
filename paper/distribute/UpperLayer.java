@@ -11,6 +11,7 @@ public class UpperLayer {
     private List<int[]> startPlans;
     private int[] bestPlan;
     private int[] output;
+    double minimumCost = Integer.MAX_VALUE;
 
     public UpperLayer(MiddleLayer middleLayer,List<int[]> startPlans) {
         this.middleLayer = middleLayer;
@@ -26,8 +27,11 @@ public class UpperLayer {
         return output;
     }
 
+    public double getMinimumCost() {
+        return minimumCost;
+    }
+
     private void iterate(){
-        double minimumCost = Integer.MAX_VALUE;
         for (int[] startPlan : startPlans) {
             int[] plan = startPlan.clone();
             double cost = middleLayer.compute(plan);
